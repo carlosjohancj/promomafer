@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Nunito:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply font-body;
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-primary-100 via-purple-100 to-pink-100 min-h-screen;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-full font-semibold transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl;
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+  
+  .category-card {
+    @apply p-6 rounded-xl transition-all duration-300 hover:shadow-xl transform hover:scale-105 flex flex-col items-center justify-center text-center space-y-3;
+  }
+  
+  .game-card {
+    @apply p-6 rounded-xl transition-all duration-300 hover:shadow-xl transform hover:scale-105 cursor-pointer;
+  }
+
+  .hover-bounce:hover {
+    @apply animate-bounce;
+  }
+  
+  .hover-wiggle:hover {
+    @apply animate-wiggle;
+  }
+  
+  .floating {
+    @apply animate-float;
+  }
+}

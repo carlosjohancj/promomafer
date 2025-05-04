@@ -1,0 +1,84 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CategoryCard from "../components/CategoryCard.astro";
+---
+
+<Layout>
+  <div class="py-8 md:py-12">
+    <section class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary-800 animate-float">
+        ¡Aprende y Diviértete!
+      </h1>
+      <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
+        Bienvenido a tu aventura de aprendizaje. Explora las diferentes categorías
+        y diviértete mientras descubres cosas nuevas.
+      </p>
+    </section>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <CategoryCard
+        title="Matemática"
+        description="¡Explora el mundo de los números y las formas!"
+        color="math"
+        icon="🧮"
+        href="/matematica"
+      />
+      
+      <CategoryCard
+        title="Castellano"
+        description="¡Descubre las letras, las palabras y las historias!"
+        color="spanish"
+        icon="📚"
+        href="/castellano"
+      />
+      
+      <CategoryCard
+        title="Inglés"
+        description="¡Aprende nuevas palabras en inglés y diviértete!"
+        color="english"
+        icon="🇬🇧"
+        href="/ingles"
+      />
+      
+      <CategoryCard
+        title="Tecnología"
+        description="¡Conoce el asombroso mundo digital!"
+        color="tech"
+        icon="🤖"
+        href="/tecnologia"
+      />
+      
+      <CategoryCard
+        title="Historia"
+        description="¡Viaja en el tiempo y descubre el pasado!"
+        color="history"
+        icon="🏛️"
+        href="/historia"
+      />
+      
+      <CategoryCard
+        title="Desarrollo Cognitivo"
+        description="¡Entrena tu mente con juegos divertidos!"
+        color="cognitive"
+        icon="🧠"
+        href="/cognitivo"
+      />
+      
+      <CategoryCard
+        title="¡Sorpresas!"
+        description="¡Encuentra actividades extra para explorar!"
+        color="extras"
+        icon="🎁"
+        href="/extras"
+        className="col-span-1 sm:col-span-2 lg:col-span-3 max-w-md mx-auto"
+      />
+    </div>
+
+    <div class="mt-16 text-center">
+      <a href="/about" class="btn btn-primary inline-flex items-center space-x-2">
+        <span>Conoce más sobre la Promoción XVII</span>
+        <span>→</span>
+      </a>
+    </div>
+  </div>
+</Layout>

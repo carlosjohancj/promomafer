@@ -1,0 +1,29 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AhorcadoPalabras from "../../components/castellano/AhorcadoPalabras";
+---
+
+<Layout title="El Ahorcado de las Palabras Amigas - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-spanish-dark">El Ahorcado de las Palabras Amigas</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Adivina palabras relacionadas con la amistad, la familia y la escuela.
+        ¡Selecciona las letras correctas antes de que se complete el dibujo!
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+      <AhorcadoPalabras client:load />
+    </div>
+
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="/castellano" class="btn btn-secondary">
+        ← Volver a Castellano
+      </a>
+      <a href="/" class="btn btn-primary">
+        Ir al inicio
+      </a>
+    </div>
+  </div>
+</Layout>

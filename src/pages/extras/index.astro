@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+---
+
+<Layout title="¡Sorpresas! - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-extras-dark">¡Sorpresas!</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Descubre actividades adicionales y juegos especiales que hemos preparado
+        para que sigas explorando y aprendiendo de manera divertida.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <GameCard
+        title="Diario de Exploración"
+        description="Un espacio para dibujar o escribir sobre lo que has aprendido en las diferentes actividades."
+        icon="📝"
+        href="/extras/diario-exploracion"
+        color="extras"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="Juegos de Memoria Visual"
+        description="Ejercita tu memoria con imágenes de animales, plantas y personajes de cuentos."
+        icon="🦊"
+        href="/extras/memoria-visual"
+        color="extras"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Páginas para Colorear"
+        description="Colorea dibujos interactivos directamente en la pantalla con una amplia paleta de colores."
+        icon="🎨"
+        href="/extras/paginas-colorear"
+        color="extras"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="Creación de Música"
+        description="Arrastra y suelta notas musicales para crear melodías simples y divertidas."
+        icon="🎵"
+        href="/extras/creacion-musica"
+        color="extras"
+        level="medio"
+      />
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/" class="btn btn-secondary">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>

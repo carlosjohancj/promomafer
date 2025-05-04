@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+---
+
+<Layout title="Castellano - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-spanish-dark">Castellano</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Descubre el maravilloso mundo de las letras, las palabras y los cuentos
+        a través de juegos entretenidos y creativos.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <GameCard
+        title="El Ahorcado de las Palabras Amigas"
+        description="Adivina palabras relacionadas con la amistad, la familia y la escuela. ¡Cada letra cuenta!"
+        icon="🔤"
+        href="/castellano/ahorcado-palabras"
+        color="spanish"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Crea tu Cuento Animado"
+        description="Arrastra personajes y escenarios para crear tu propia historia. ¡Da rienda suelta a tu creatividad!"
+        icon="📖"
+        href="/castellano/crea-cuento"
+        color="spanish"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="Sopa de Letras Interactiva"
+        description="Encuentra palabras escondidas en una sopa de letras. ¡Mejora tu observación y vocabulario!"
+        icon="🔍"
+        href="/castellano/sopa-letras"
+        color="spanish"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Rimas Divertidas"
+        description="Identifica palabras que riman entre sí. ¡Un juego musical para tus oídos!"
+        icon="🎵"
+        href="/castellano/rimas-divertidas"
+        color="spanish"
+        level="fácil"
+      />
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/" class="btn btn-secondary">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>

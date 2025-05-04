@@ -1,0 +1,39 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  color: string;
+  icon: string;
+  href: string;
+  className?: string;
+}
+
+const { title, description, color, icon, href, className = "" } = Astro.props;
+
+// Dynamic classes based on color
+const bgClass = `bg-${color}-light`;
+const textClass = `text-${color}-dark`;
+const hoverClass = `hover:shadow-${color}-300/50`;
+const borderClass = `border-${color}-DEFAULT`;
+---
+
+<a 
+  href={href} 
+  class:list={[
+    "category-card border-2 group",
+    bgClass,
+    borderClass,
+    hoverClass,
+    className
+  ]}
+>
+  <div class="text-5xl mb-2 transform transition-transform group-hover:scale-110">
+    {icon}
+  </div>
+  <h2 class:list={["text-2xl font-bold mb-2", textClass]}>
+    {title}
+  </h2>
+  <p class="text-gray-600">
+    {description}
+  </p>
+</a>

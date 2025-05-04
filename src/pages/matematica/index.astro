@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+---
+
+<Layout title="Matemática - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-math-dark">Matemática</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Explora el fascinante mundo de los números, las formas y los patrones
+        a través de divertidos juegos y actividades.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <GameCard
+        title="El Tesoro de los Números"
+        description="Sigue pistas numéricas para encontrar el tesoro escondido. Practica sumas y restas de manera divertida."
+        icon="🏆"
+        href="/matematica/tesoro-numeros"
+        color="math"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="Construye Figuras"
+        description="Arrastra y coloca formas geométricas para crear figuras completas. ¡Aprende sobre formas y espacios!"
+        icon="🔷"
+        href="/matematica/construye-figuras"
+        color="math"
+        level="medio"
+      />
+      
+      <GameCard
+        title="La Carrera de los Patrones"
+        description="Identifica el siguiente elemento en un patrón para avanzar en la carrera. ¡Pon a prueba tu lógica!"
+        icon="🏁"
+        href="/matematica/carrera-patrones"
+        color="math"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Midiendo con Animalitos"
+        description="Usa unidades no convencionales como 'hormigas' o 'manos' para medir objetos cotidianos."
+        icon="📏"
+        href="/matematica/midiendo-animalitos"
+        color="math"
+        level="fácil"
+      />
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/" class="btn btn-secondary">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>

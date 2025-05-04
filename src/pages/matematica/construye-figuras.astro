@@ -1,0 +1,29 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BuildFigures from "../../components/matematica/buildfigures";
+---
+
+<Layout title="Construye Figuras">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-math-dark">
+        El Tesoro de los Números
+      </h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Arrastra y coloca formas geométricas para crear figuras completas.
+        ¡Aprende sobre formas y espacios!
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+      <BuildFigures client:load />
+    </div>
+
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="/matematica" class="btn btn-secondary">
+        ← Volver a Matemática
+      </a>
+      <a href="/" class="btn btn-primary"> Ir al inicio </a>
+    </div>
+  </div>
+</Layout>

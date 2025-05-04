@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+---
+
+<Layout title="Desarrollo Cognitivo - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-cognitive-dark">Desarrollo Cognitivo</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Entrena tu cerebro con juegos diseñados para mejorar la atención, la memoria, 
+        la lógica y otras habilidades cognitivas importantes.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <GameCard
+        title="Encuentra las Diferencias"
+        description="Observa detenidamente y encuentra todas las diferencias entre dos imágenes similares."
+        icon="👁️"
+        href="/cognitivo/encuentra-diferencias"
+        color="cognitive"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Clasifica y Agrupa"
+        description="Ordena objetos según su color, forma o tipo. ¡Entrena tu habilidad para clasificar!"
+        icon="🗂️"
+        href="/cognitivo/clasifica-agrupa"
+        color="cognitive"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="Series Lógicas"
+        description="Adivina cuál es el siguiente elemento en una secuencia lógica. ¡Entrena tu pensamiento!"
+        icon="🔄"
+        href="/cognitivo/series-logicas"
+        color="cognitive"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Juegos de Atención"
+        description="Repite secuencias de luces y sonidos cada vez más largas. ¡Pon a prueba tu memoria!"
+        icon="🔔"
+        href="/cognitivo/juegos-atencion"
+        color="cognitive"
+        level="difícil"
+      />
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/" class="btn btn-secondary">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>

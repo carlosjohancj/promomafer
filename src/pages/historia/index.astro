@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+---
+
+<Layout title="Historia - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-history-dark">Historia</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Viaja a través del tiempo y descubre eventos fascinantes del pasado 
+        con juegos y actividades que harán de la historia una aventura.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <GameCard
+        title="La Línea de Tiempo Interactiva"
+        description="Explora eventos históricos importantes en una línea de tiempo interactiva. ¡Descubre cuándo ocurrieron!"
+        icon="⏳"
+        href="/historia/linea-tiempo"
+        color="history"
+        level="medio"
+      />
+      
+      <GameCard
+        title="¿Quién Vivió Aquí?"
+        description="Identifica qué personas vivieron en diferentes tipos de viviendas a lo largo de la historia."
+        icon="🏠"
+        href="/historia/quien-vivio-aqui"
+        color="history"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="El Puzzle de la Historia"
+        description="Completa rompecabezas de imágenes históricas importantes y aprende sobre ellas."
+        icon="🧩"
+        href="/historia/puzzle-historia"
+        color="history"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Crea tu Propia Pirámide"
+        description="Construye una pirámide virtual y aprende sobre estas impresionantes estructuras antiguas."
+        icon="🏛️"
+        href="/historia/crea-piramide"
+        color="history"
+        level="fácil"
+      />
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/" class="btn btn-secondary">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>

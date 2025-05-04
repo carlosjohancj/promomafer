@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+---
+
+<Layout title="Inglés - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-english-dark">Inglés</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Aprende un nuevo idioma jugando con palabras, imágenes y canciones en inglés.
+        ¡Una forma divertida de expandir tu vocabulario!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <GameCard
+        title="Memory de Vocabulario"
+        description="Encuentra pares de cartas con imágenes y sus nombres en inglés. ¡Pon a prueba tu memoria!"
+        icon="🎴"
+        href="/ingles/memory-vocabulario"
+        color="english"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="El Detective de las Palabras"
+        description="Observa la imagen y selecciona la palabra correcta en inglés. ¡Conviértete en un detective de idiomas!"
+        icon="🔎"
+        href="/ingles/detective-palabras"
+        color="english"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Canciones Interactivas"
+        description="Completa las letras de canciones infantiles en inglés. ¡Aprende cantando!"
+        icon="🎤"
+        href="/ingles/canciones-interactivas"
+        color="english"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Colorea por Números"
+        description="Sigue las instrucciones en inglés para colorear un dibujo según los números indicados."
+        icon="🎨"
+        href="/ingles/colorea-numeros"
+        color="english"
+        level="fácil"
+      />
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/" class="btn btn-secondary">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>

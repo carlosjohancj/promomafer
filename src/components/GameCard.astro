@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon: string;
+  href: string;
+  color: string;
+  level?: "fácil" | "medio" | "difícil";
+}
+
+const { title, description, icon, href, color, level = "fácil" } = Astro.props;
+
+// Dynamic classes based on color
+const bgClass = `bg-${color}-light`;
+const borderClass = `border-${color}-DEFAULT`;
+const textClass = `text-${color}-dark`;
+
+// Level indicator
+const getLevelColor = () => {
+  switch(level) {
+    case "fácil": return "bg-green-400";
+    case "medio": return "bg-yellow-400";
+    case "difícil": return "bg-red-400";
+    default: return "bg-green-400";
+  }
+};
+---
+
+<a href={href} class:list={["game-card group border-2", bgClass, borderClass]}>
+  <div class="flex items-center justify-between mb-3">
+    <div class="text-4xl">{icon}</div>
+    <div class:list={["px-2 py-1 rounded-full text-xs font-bold text-white", getLevelColor()]}>
+      {level}
+    </div>
+  </div>
+  <h3 class:list={["text-xl font-bold mb-2", textClass]}>{title}</h3>
+  <p class="text-gray-600 text-sm">{description}</p>
+  <div class="mt-4 flex justify-end">
+    <span class="text-sm font-semibold inline-flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <span>Jugar</span>
+      <span class="transform group-hover:translate-x-1 transition-transform">→</span>
+    </span>
+  </div>
+</a>

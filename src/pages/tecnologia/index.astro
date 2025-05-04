@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+---
+
+<Layout title="Tecnología - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-tech-dark">Tecnología</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Descubre el fascinante mundo de la tecnología a través de juegos interactivos
+        y actividades que te enseñarán conceptos básicos de manera divertida.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      <GameCard
+        title="Rompecabezas de Circuitos"
+        description="Une los componentes para crear un circuito que encienda una luz virtual. ¡Aprende sobre electricidad!"
+        icon="💡"
+        href="/tecnologia/rompecabezas-circuitos"
+        color="tech"
+        level="medio"
+      />
+      
+      <GameCard
+        title="El Robot Programable"
+        description="Arrastra comandos para programar un robot y completar misiones. ¡Tu primera experiencia de programación!"
+        icon="🤖"
+        href="/tecnologia/robot-programable"
+        color="tech"
+        level="medio"
+      />
+      
+      <GameCard
+        title="Crea tu Avatar"
+        description="Personaliza tu propio personaje virtual eligiendo características y accesorios."
+        icon="👤"
+        href="/tecnologia/crea-avatar"
+        color="tech"
+        level="fácil"
+      />
+      
+      <GameCard
+        title="¿Cómo Funciona?"
+        description="Explora animaciones sobre cómo funcionan objetos cotidianos como ventiladores, coches y más."
+        icon="⚙️"
+        href="/tecnologia/como-funciona"
+        color="tech"
+        level="fácil"
+      />
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/" class="btn btn-secondary">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>
