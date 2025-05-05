@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import AhorcadoPalabras from "../../components/castellano/AhorcadoPalabras";
+import AhorcadoPalabrasComponent from "../../components/castellano/AhorcadoPalabras";
 ---
 
 <Layout title="El Ahorcado de las Palabras Amigas - Aprende Jugando">
@@ -14,7 +14,7 @@ import AhorcadoPalabras from "../../components/castellano/AhorcadoPalabras";
     </div>
 
     <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
-      <AhorcadoPalabras client:load />
+      <AhorcadoPalabrasComponent client:load />
     </div>
 
     <div class="mt-8 flex justify-center space-x-4">

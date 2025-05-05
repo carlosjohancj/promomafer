@@ -1,0 +1,30 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EnglishColorGame from '../../components/ingles/colors.jsx'
+
+const pageTitle = "Color Game - Learn English";
+---
+
+<Layout title={pageTitle}>
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-english-dark">Color Identification Game</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Aprende los colores en inglés con este juego interactivo. ¡Perfecto para los pequeños aprendices!
+      </p>
+    </div>
+
+    <div class="max-w-5xl mx-auto">
+      <EnglishColorGame client:load />
+    </div>
+
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="/ingles" class="btn btn-secondary">
+        ← Volver a Ingles
+      </a>
+      <a href="/" class="btn btn-primary">
+        Ir a Inicio
+      </a>
+    </div>
+  </div>
+</Layout>
