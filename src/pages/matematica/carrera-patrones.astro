@@ -1,0 +1,29 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PatternRace from "../../components/matematica/PatternRace";
+---
+
+<Layout title="La Carrera de los Patrones - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-math-dark">
+        La Carrera de los Patrones
+      </h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Identifica el siguiente elemento en un patrón para avanzar en la
+        carrera. ¡Pon a prueba tu lógica!
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+      <PatternRace client:load/>
+    </div>
+
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="/matematica" class="btn btn-secondary">
+        ← Volver a Matemática
+      </a>
+      <a href="/" class="btn btn-primary"> Ir al inicio </a>
+    </div>
+  </div>
+</Layout>

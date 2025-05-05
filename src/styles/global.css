@@ -60,3 +60,21 @@
     @apply animate-float;
   }
 }
+.triangle-yellow-300 {
+  border-bottom-color: #fcd34d;
+}
+.triangle-yellow-400 {
+  border-bottom-color: #fbbf24;
+}
+.triangle-blue-300 {
+  border-bottom-color: #93c5fd;
+}
+.triangle-blue-400 {
+  border-bottom-color: #60a5fa;
+}
+.triangle-green-300 {
+  border-bottom-color: #86efac;
+}
+.triangle-green-400 {
+  border-bottom-color: #4ade80;
+}
