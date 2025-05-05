@@ -35,26 +35,26 @@ const FlyingObject = ({ type, letter, color, top, left, duration, onDestroy, onR
         switch(type) {
             case 'balloon':
                 return (
-                    <div className={`w-16 h-20 rounded-full border-4 border-${color}-500 bg-${color}-200 flex items-center justify-center relative`}>
+                    <div className={`w-16 h-20 rounded-full border-4 border-${color}-500 bg-${color}-200 flex items-center justify-center`}>
                         <div className="w-1 h-8 bg-gray-400 mt-16 absolute"></div>
                     </div>
                 );
             case 'kite':
                 return (
-                    <div className={`w-16 h-16 bg-${color}-500 rotate-45 flex items-center justify-center relative`}>
+                    <div className={`w-16 h-16 bg-${color}-500 rotate-45 flex items-center justify-center`}>
                         <div className="-rotate-45"></div>
                     </div>
                 );
             case 'bird':
                 return (
-                    <div className={`w-16 h-12 bg-${color}-500 rounded-full flex items-center justify-center relative`}>
+                    <div className={`w-16 h-12 bg-${color}-500 rounded-full flex items-center justify-center`}>
                         <div className="w-4 h-4 bg-yellow-400 rounded-full absolute -right-1 -top-1"></div>
                         <div className="w-2 h-8 bg-yellow-400 absolute right-0 top-4 -rotate-45"></div>
                     </div>
                 );
             case 'ufo':
                 return (
-                    <div className="flex flex-col items-center relative">
+                    <div className="flex flex-col items-center">
                         <div className={`w-16 h-6 bg-${color}-600 rounded-full`}></div>
                         <div className={`w-12 h-3 bg-${color}-400 rounded-full -mt-1`}></div>
                     </div>
