@@ -1,0 +1,34 @@
+@keyframes fly {
+  0% { 
+    transform: translateY(-100px) translateX(var(--start-x)); 
+  }
+  100% { 
+    transform: translateY(calc(100vh - 100px)) translateX(var(--end-x)); 
+  }
+}
+
+.flying-object {
+  animation: fly linear forwards;
+  animation-duration: var(--duration);
+  position: absolute;
+  z-index: 10;
+}
+
+.explosion {
+  animation: explode 0.5s ease-out forwards;
+}
+
+@keyframes explode {
+  0% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+  50% { 
+    transform: scale(1.5); 
+    opacity: 0.7; 
+  }
+  100% { 
+    transform: scale(0); 
+    opacity: 0; 
+  }
+}

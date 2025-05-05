@@ -1,0 +1,30 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import WhatsInTheBag from "../../components/ingles/whats-in-the-bag";
+
+const pageTitle = "What's in the Bag? - English Learning Game";
+---
+
+<Layout title={pageTitle}>
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-english-dark">What's in the Bag?</h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        ¡Adivina el objeto oculto usando pistas táctiles!
+      </p>
+    </div>
+
+    <div class="max-w-md mx-auto">
+      <WhatsInTheBag client:load />
+    </div>
+
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="/ingles" class="btn btn-secondary">
+        ← Regresar a Ingles
+      </a>
+      <a href="/" class="btn btn-primary">
+        Ir al Inicio
+      </a>
+    </div>
+  </div>
+</Layout>

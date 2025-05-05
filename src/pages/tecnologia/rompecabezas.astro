@@ -1,0 +1,28 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CircuitPuzzle from "../../components/tecnologia/rompecabezas";
+---
+
+<Layout title="Rompe Cabezas - Aprende Jugando">
+  <div class="py-8">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4 text-math-dark">
+        Rompe Cabezas
+      </h1>
+      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+        Este juego enseña conceptos básicos de circuitos eléctricos de manera interactiva y divertida, perfecto para niños de primaria.
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+      <CircuitPuzzle client:load/>
+    </div>
+
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="/tecnologia" class="btn btn-secondary">
+        ← Volver a Tecnologia
+      </a>
+      <a href="/" class="btn btn-primary"> Ir al inicio </a>
+    </div>
+  </div>
+</Layout>
