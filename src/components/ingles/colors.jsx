@@ -160,7 +160,6 @@ export default function EnglishColorGame() {
 
   // Seleccionar un nuevo color y opciones
   const selectNewColor = () => {
-    // Cancelar cualquier audio en reproducción
     if (isSpeechSupported) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
@@ -170,11 +169,6 @@ export default function EnglishColorGame() {
     const newColor = availableColors[Math.floor(Math.random() * availableColors.length)];
     setCurrentColor(newColor);
     
-    // Reproducir audio en modo escucha
-    if (gameMode === MODES.LISTEN && isSpeechSupported) {
-      speakColor(newColor.name);
-    }
-
     // Preparar opciones para el modo identificación
     if (gameMode === MODES.IDENTIFY) {
       const incorrectOptions = availableColors
@@ -198,6 +192,9 @@ export default function EnglishColorGame() {
   // Función para reproducir el audio del color
   const speakColor = (colorName) => {
     if (!isSpeechSupported) return;
+
+    // Cancelar cualquier audio previo
+    window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance();
     utterance.text = colorName;
@@ -260,7 +257,25 @@ export default function EnglishColorGame() {
     if (!showInstructions && currentColor === null) {
       selectNewColor();
     }
-  }, [showInstructions, currentColor]);
+    
+    // Solo reproducir automáticamente en modo LISTEN cuando cambia el color
+    if (!showInstructions && gameMode === MODES.LISTEN && currentColor && isSpeechSupported) {
+      speakColor(currentColor.name);
+    }
+  }, [showInstructions, currentColor, gameMode]);
+
+  // Efecto para repetir el audio automáticamente en modo LISTEN
+  useEffect(() => {
+    let timeout;
+    
+    if (gameMode === MODES.LISTEN && currentColor && !isCorrect && !isSpeaking) {
+      timeout = setTimeout(() => {
+        speakColor(currentColor.name);
+      }, 10000); // Repetir cada 10 segundos
+    }
+
+    return () => clearTimeout(timeout);
+  }, [currentColor, isCorrect, gameMode, isSpeaking]);
 
   return (
     <div className="flex flex-col md:flex-row gap-8 items-start p-4 max-w-4xl mx-auto">
@@ -373,14 +388,14 @@ export default function EnglishColorGame() {
               </div>
             )}
             
-            {/* Modo Escuchar */}
+            {/* Modo Escuchar con animación mejorada */}
             {gameMode === MODES.LISTEN && (
               <div className="flex flex-col items-center mb-8">
                 <button
                   onClick={playAgain}
                   className={`p-4 rounded-full mb-4 transition-colors ${
                     isSpeaking
-                      ? 'bg-blue-300 cursor-not-allowed'
+                      ? 'bg-blue-300 animate-pulse'
                       : 'bg-blue-100 hover:bg-blue-200'
                   }`}
                   disabled={isSpeaking}
@@ -390,7 +405,14 @@ export default function EnglishColorGame() {
                   </svg>
                 </button>
                 <p className="text-sm text-gray-500 mb-2">
-                  {isSpeaking ? TEXTS.speaking[language] : TEXTS.hearAgain[language]}
+                  {isSpeaking ? (
+                    <span className="flex items-center">
+                      <span className="animate-pulse mr-1">🔊</span> 
+                      {TEXTS.speaking[language]}
+                    </span>
+                  ) : (
+                    TEXTS.hearAgain[language]
+                  )}
                 </p>
               </div>
             )}
