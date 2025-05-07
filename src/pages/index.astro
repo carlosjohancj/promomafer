@@ -4,29 +4,39 @@ import CategoryCard from "../components/CategoryCard.astro";
 ---
 
 <Layout>
-  <div class="py-8 md:py-12">
-    <section class="text-center mb-12">
-      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary-800 animate-float">
+  {/* Contenedor principal con un fondo degradado sutil o un color de fondo claro */}
+  <div class="min-h-screen bg-gradient-to-br from-primary-50 via-slate-50 to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-primary-900 py-12 md:py-20 px-4">
+    
+    {/* Sección de Bienvenida Mejorada */}
+    <section class="text-center mb-16 md:mb-20">
+      <div class="inline-block p-4 mb-6 bg-primary-100 dark:bg-primary-700 rounded-full shadow-md">
+        <span class="text-5xl animate-pulse">🚀</span> {/* Icono que podría rotar o pulsar */}
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-blue-500 dark:from-primary-400 dark:to-blue-300 animate-float">
         ¡Aprende y Diviértete!
       </h1>
-      <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
-        Bienvenido a tu aventura de aprendizaje. Explora las diferentes categorías
-        y diviértete mientras descubres cosas nuevas.
+      <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        Bienvenido a tu aventura de aprendizaje interactiva. Explora las diversas categorías, sumérgete en el conocimiento y disfruta cada nuevo descubrimiento. ¡El saber te espera!
       </p>
     </section>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+    {/* Grid de Categorías */}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8 md:gap-10 max-w-7xl mx-auto">
+      {/*
+        Asegúrate que tu CategoryCard.astro tenga clases para hover effects, sombras, etc.
+        Ejemplo: hover:scale-105 transition-transform duration-300
+      */}
       <CategoryCard
         title="Matemática"
-        description="¡Explora el mundo de los números y las formas!"
-        color="math"
+        description="¡Explora el fascinante mundo de los números, las formas y los patrones!"
+        color="math" 
         icon="🧮"
         href="/matematica"
       />
       
       <CategoryCard
         title="Castellano"
-        description="¡Descubre las letras, las palabras y las historias!"
+        description="¡Descubre la magia de las letras, el poder de las palabras y la belleza de las historias!"
         color="spanish"
         icon="📚"
         href="/castellano"
@@ -34,7 +44,7 @@ import CategoryCard from "../components/CategoryCard.astro";
       
       <CategoryCard
         title="Inglés"
-        description="¡Aprende nuevas palabras en inglés y diviértete!"
+        description="¡Aprende nuevas palabras y frases en inglés mientras te diviertes!"
         color="english"
         icon="🇬🇧"
         href="/ingles"
@@ -42,19 +52,47 @@ import CategoryCard from "../components/CategoryCard.astro";
       
       <CategoryCard
         title="Tecnología"
-        description="¡Conoce el asombroso mundo digital!"
+        description="¡Conoce el asombroso universo digital, la programación y las últimas innovaciones!"
         color="tech"
         icon="🤖"
         href="/tecnologia"
       />
       
+      {/* Podrías añadir más tarjetas aquí si es necesario */}
+      {/* <CategoryCard
+        title="Ciencias"
+        description="¡Experimenta y descubre los secretos de la naturaleza y el universo!"
+        color="science" // Define este color
+        icon="🔬"
+        href="/ciencias"
+      />
+      */}
     </div>
 
-    <div class="mt-16 text-center">
-      <a href="/about" class="btn btn-primary inline-flex items-center space-x-2">
+    {/* Sección "Conoce más" con un poco más de énfasis */}
+    <div class="mt-20 md:mt-24 text-center">
+      <a 
+        href="/about" 
+        class="btn btn-primary inline-flex items-center space-x-3 px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-in-out group"
+      >
         <span>Conoce más sobre la Promoción XVII</span>
-        <span>→</span>
+        <span class="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
       </a>
     </div>
   </div>
 </Layout>
+
+<style is:global>
+  /* Si necesitas estilos globales adicionales, por ejemplo, para fuentes personalizadas */
+  /* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap'); */
+  /* body { font-family: 'Poppins', sans-serif; } */
+
+  /* Asegúrate que la animación float esté definida si no está en tailwind.config.js */
+  /* @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  } */
+</style>
