@@ -1,29 +1,22 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import SpaceBirds from "../../components/tecnologia/SpaceBirds.jsx";
+import SpaceLetters from "../../components/tecnologia/SpaceBirds.jsx";
 import "../../styles/SpaceBirds.css";
 ---
 
-<Layout title="Mecanografia - Aprende Jugando">
-  <div class="py-8">
-    <div class="mb-10 text-center">
-      <h1 class="text-4xl font-bold mb-4 text-math-dark">
-        ¡Aves Espaciales! - Juego de Mecanografía
-      </h1>
-      <p class="text-lg text-gray-700 max-w-3xl mx-auto">
-        Este juego ayuda a los niños a practicar mecanografía de una manera divertida, derribando objetos voladores al presionar las teclas correctas.
-      </p>
+<Layout title="Mecanografía - Letras Voladoras">
+  <div class="py-12">
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+      <SpaceLetters client:load />
     </div>
 
-    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
-      <SpaceBirds client:load/>
-    </div>
-
-    <div class="mt-8 flex justify-center space-x-4">
-      <a href="/tecnologia" class="btn btn-secondary">
+    <div class="mt-12 flex justify-center space-x-6">
+      <a href="/tecnologia" class="btn btn-secondary px-6 py-3 rounded-lg">
         ← Volver a Tecnología
       </a>
-      <a href="/" class="btn btn-primary"> Ir al inicio </a>
+      <a href="/" class="btn btn-primary px-6 py-3 rounded-lg">
+        Ir al inicio
+      </a>
     </div>
   </div>
 </Layout>

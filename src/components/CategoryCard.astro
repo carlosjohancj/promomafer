@@ -3,7 +3,7 @@ interface Props {
   title: string;
   description: string;
   color: string;
-  icon: any; // Cambiado a `any` para aceptar componentes JSX
+  icon: string;
   href: string;
   className?: string;
 }
@@ -21,7 +21,7 @@ const borderClass = `border-${color}-DEFAULT`;
   href={href} 
   class:list={[
     "category-card border-2 group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300",
-    bgClass,
+ 
     borderClass,
     hoverClass,
     className
@@ -34,7 +34,9 @@ const borderClass = `border-${color}-DEFAULT`;
       `bg-${color}-DEFAULT text-white`
     ]}
   >
-    {icon}
+    <span class="text-6xl transform transition-transform group-hover:scale-125">
+      {icon}
+    </span>
   </div>
 
   {/* Content Section */}

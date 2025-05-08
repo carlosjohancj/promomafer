@@ -2,128 +2,116 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { FaPlay, FaPause, FaRedo } from 'react-icons/fa';
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const OBJECT_TYPES = ['balloon', 'kite', 'bird', 'ufo'];
 const COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'orange'];
-const START_SPEED = 10000; // 10 segundos para cruzar la pantalla
+const START_SPEED = 20000; // 10 segundos para cruzar la pantalla
 const SPEED_INCREASE = 0.95; // Cada nivel es 5% más rápido
 const LEVEL_UP_SCORE = 10;
 
-const FlyingObject = ({ type, letter, color, top, left, duration, onDestroy, onReachBottom }) => {
+const FloatingLetter = ({ letter, color, left, duration, onDestroy, onReachBottom }) => {
     const [exploded, setExploded] = useState(false);
-    const objectRef = useRef(null);
-    
+    const [isVisible, setIsVisible] = useState(false);
+    const letterRef = useRef(null);
+
     useEffect(() => {
-        const element = objectRef.current;
+        const element = letterRef.current;
         if (!element) return;
-        
+
+        // Esperar a que el elemento esté en el DOM y sea visible
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                setIsVisible(true);
+                observer.disconnect();
+            }
+        }, { threshold: 0.1 });
+
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (!isVisible) return;
+
+        const element = letterRef.current;
+        if (!element) return;
+
+        requestAnimationFrame(() => {
+            element.style.animation = `fall ${duration}ms linear forwards`;
+        });
+
         const handleAnimationEnd = () => {
             if (!exploded) {
                 onReachBottom();
             }
         };
-        
+
         element.addEventListener('animationend', handleAnimationEnd);
         return () => element.removeEventListener('animationend', handleAnimationEnd);
-    }, [exploded, onReachBottom]);
-    
+    }, [duration, exploded, onReachBottom, isVisible]);
+
     const handleClick = () => {
         setExploded(true);
         setTimeout(() => onDestroy(), 500);
     };
-    
-    const getObjectImage = () => {
-        switch(type) {
-            case 'balloon':
-                return (
-                    <div className={`w-16 h-20 rounded-full border-4 border-${color}-500 bg-${color}-200 flex items-center justify-center`}>
-                        <div className="w-1 h-8 bg-gray-400 mt-16 absolute"></div>
-                    </div>
-                );
-            case 'kite':
-                return (
-                    <div className={`w-16 h-16 bg-${color}-500 rotate-45 flex items-center justify-center`}>
-                        <div className="-rotate-45"></div>
-                    </div>
-                );
-            case 'bird':
-                return (
-                    <div className={`w-16 h-12 bg-${color}-500 rounded-full flex items-center justify-center`}>
-                        <div className="w-4 h-4 bg-yellow-400 rounded-full absolute -right-1 -top-1"></div>
-                        <div className="w-2 h-8 bg-yellow-400 absolute right-0 top-4 -rotate-45"></div>
-                    </div>
-                );
-            case 'ufo':
-                return (
-                    <div className="flex flex-col items-center">
-                        <div className={`w-16 h-6 bg-${color}-600 rounded-full`}></div>
-                        <div className={`w-12 h-3 bg-${color}-400 rounded-full -mt-1`}></div>
-                    </div>
-                );
-            default:
-                return <div className={`w-16 h-16 bg-${color}-500 rounded-full`}></div>;
-        }
-    };
-    
+
     return (
         <div
-            ref={objectRef}
-            className={`absolute flying-object ${exploded ? 'explosion' : ''} cursor-pointer`}
+            ref={letterRef}
+            className={`flying-letter ${exploded ? 'explosion' : ''} cursor-pointer`}
             style={{
-                '--start-x': `${left}px`,
-                '--end-x': `${Math.random() * 100 - 50}px`,
-                '--duration': `${duration}ms`,
-                top: `${top}px`,
-                left: `${left}px`,
+                '--left': `${left}px`,
+                '--duration': duration,
+                opacity: isVisible ? 1 : 0
             }}
             onClick={handleClick}
         >
-            <div className="flex flex-col items-center">
-                {getObjectImage()}
-                <div className={`text-2xl font-bold mt-1 text-${color}-300`}>{letter}</div>
-            </div>
+            <div className={`text-4xl font-bold text-${color}-500`}>{letter}</div>
         </div>
     );
 };
 
-const SpaceBirds = () => {
+const SpaceLetters = () => {
     const [score, setScore] = useState(0);
     const [level, setLevel] = useState(1);
     const [gameOver, setGameOver] = useState(false);
-    const [objects, setObjects] = useState([]);
+    const [letters, setLetters] = useState([]);
     const [lives, setLives] = useState(3);
     const [isPaused, setIsPaused] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
     const gameAreaRef = useRef(null);
-    
-    const spawnObject = () => {
+
+    const spawnLetter = () => {
         if (isPaused || !gameStarted || gameOver) return;
-        
-        const type = OBJECT_TYPES[Math.floor(Math.random() * OBJECT_TYPES.length)];
+
         const letter = LETTERS[Math.floor(Math.random() * LETTERS.length)];
         const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-        
+
         const gameArea = gameAreaRef.current;
         if (!gameArea) return;
-        
-        const maxLeft = gameArea.clientWidth - 80;
-        const left = Math.random() * maxLeft;
-        const duration = START_SPEED * Math.pow(SPEED_INCREASE, level - 1);
-        
-        const newObject = {
+
+        // Calcular el margen de seguridad basado en el tamaño de la letra
+        const letterSize = 40; // Tamaño aproximado de la letra en píxeles
+        const margin = letterSize;
+        const maxLeft = gameArea.clientWidth - (margin * 2);
+        const left = margin + (Math.random() * maxLeft);
+
+        // Duración base ajustada al tamaño del contenedor
+        const baseDuration = START_SPEED * (400 / gameArea.clientHeight);
+        const duration = baseDuration * Math.pow(SPEED_INCREASE, level - 1);
+
+        const newLetter = {
             id: Date.now() + Math.random(),
-            type,
             letter,
             color,
-            top: 0,
             left,
             duration
         };
-        
-        setObjects(prev => [...prev, newObject]);
+
+        setLetters(prev => [...prev, newLetter]);
     };
-    
-    const destroyObject = (id, scored = true) => {
-        setObjects(prev => prev.filter(obj => obj.id !== id));
+
+    const destroyLetter = (id, scored = true) => {
+        setLetters(prev => prev.filter(l => l.id !== id));
         if (scored) {
             setScore(prev => prev + level);
             if (score > 0 && score % LEVEL_UP_SCORE === 0) {
@@ -131,20 +119,20 @@ const SpaceBirds = () => {
             }
         }
     };
-    
+
     const handleKeyDown = (e) => {
         if (!gameStarted || gameOver) return;
-        
+
         const keyPressed = e.key.toUpperCase();
-        const objectToDestroy = objects.find(obj => obj.letter === keyPressed);
-        
-        if (objectToDestroy) {
-            destroyObject(objectToDestroy.id);
+        const letterToDestroy = letters.find(l => l.letter === keyPressed);
+
+        if (letterToDestroy) {
+            destroyLetter(letterToDestroy.id);
         }
     };
-    
-    const handleObjectReachBottom = (id) => {
-        destroyObject(id, false);
+
+    const handleLetterReachBottom = (id) => {
+        destroyLetter(id, false);
         setLives(prev => {
             const newLives = prev - 1;
             if (newLives <= 0) {
@@ -153,38 +141,38 @@ const SpaceBirds = () => {
             return newLives;
         });
     };
-    
+
     const startGame = () => {
         setScore(0);
         setLevel(1);
         setLives(3);
-        setObjects([]);
+        setLetters([]);
         setGameOver(false);
         setGameStarted(true);
     };
-    
+
     const togglePause = () => {
         setIsPaused(prev => !prev);
     };
-    
+
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [objects, gameStarted, gameOver]);
-    
+    }, [letters, gameStarted, gameOver]);
+
     useEffect(() => {
         if (!gameStarted || gameOver || isPaused) return;
-        
-        const spawnInterval = setInterval(spawnObject, 2000 - (level * 100));
-        
+
+        const spawnInterval = setInterval(spawnLetter, 2000 - (level * 100));
+
         return () => clearInterval(spawnInterval);
     }, [gameStarted, gameOver, level, isPaused]);
-    
+
     return (
-        <div className="flex flex-col items-center w-full">
-            <h1 className="text-4xl font-bold mb-2 text-purple-600">¡Aves Espaciales!</h1>
+        <div className="flex flex-col items-center w-full max-w-4xl mx-auto p-4">
+            <h1 className="text-4xl font-bold mb-2 text-purple-600">¡Letras Voladoras!</h1>
             <p className="text-lg mb-6 text-center text-gray-700">
-                ¡Practica tu mecanografía derribando objetos voladores espaciales! Pulsa la letra correcta antes de que te alcancen.
+                ¡Practica tu mecanografía presionando las letras antes de que lleguen al fondo!
             </p>
             
             {!gameStarted ? (
@@ -197,11 +185,10 @@ const SpaceBirds = () => {
                     </button>
                     <div className="text-gray-600 text-center max-w-md">
                         <p className="mb-2 font-semibold">Instrucciones:</p>
-                        <p className="mb-1">1. Los objetos voladores aparecerán en la pantalla.</p>
-                        <p className="mb-1">2. Cada objeto tiene una letra asignada.</p>
-                        <p className="mb-1">3. Presiona la tecla correspondiente en tu teclado para derribarlo.</p>
-                        <p className="mb-1">4. Si un objeto llega al fondo, perderás una vida.</p>
-                        <p>5. Cada 10 puntos subes de nivel y los objetos se mueven más rápido.</p>
+                        <p className="mb-1">1. Las letras aparecerán en la pantalla.</p>
+                        <p className="mb-1">2. Presiona la tecla correspondiente en tu teclado.</p>
+                        <p className="mb-1">3. Si una letra llega al fondo, perderás una vida.</p>
+                        <p>4. Cada 10 puntos subes de nivel y las letras se mueven más rápido.</p>
                     </div>
                 </div>
             ) : (
@@ -238,17 +225,15 @@ const SpaceBirds = () => {
                         style={{ backgroundImage: 'radial-gradient(circle, #e5e7eb 1px, transparent 1px)', 
                                  backgroundSize: '20px 20px' }}
                     >
-                        {objects.map(obj => 
-                            <FlyingObject
-                                key={obj.id}
-                                type={obj.type}
-                                letter={obj.letter}
-                                color={obj.color}
-                                top={obj.top}
-                                left={obj.left}
-                                duration={obj.duration}
-                                onDestroy={() => destroyObject(obj.id)}
-                                onReachBottom={() => handleObjectReachBottom(obj.id)}
+                        {letters.map(letter => 
+                            <FloatingLetter
+                                key={letter.id}
+                                letter={letter.letter}
+                                color={letter.color}
+                                left={letter.left}
+                                duration={letter.duration}
+                                onDestroy={() => destroyLetter(letter.id)}
+                                onReachBottom={() => handleLetterReachBottom(letter.id)}
                             />
                         )}
                         <div 
@@ -275,7 +260,7 @@ const SpaceBirds = () => {
                     </div>
                     
                     <div className="mt-4 text-gray-600 text-sm">
-                        Presiona la tecla correspondiente a la letra en los objetos para derribarlos.
+                        Presiona la tecla correspondiente a las letras que aparecen en pantalla.
                     </div>
                 </>
             )}
@@ -283,4 +268,4 @@ const SpaceBirds = () => {
     );
 };
 
-export default SpaceBirds;
+export default SpaceLetters;

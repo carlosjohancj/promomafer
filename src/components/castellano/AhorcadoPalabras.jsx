@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'preact/hooks';
+import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
+import * as d3 from 'd3';
 
 const words = [
   { word: "AMISTAD", category: "Valor", hint: "Cuando te llevas bien con tus amigos" },
@@ -99,49 +100,96 @@ export default function AhorcadoPalabras() {
     </div>
   );
 
-  const renderHangman = () => (
-    <div className="relative w-48 h-64 mx-auto mb-6">
-      {/* Base */}
-      <div className="absolute bottom-0 left-0 right-0 h-2 bg-gray-800 rounded-full animate-fade-in" />
+  const HangmanSVG = () => {
+    const svgRef = useRef();
+
+    useEffect(() => {
+      const svg = d3.select(svgRef.current);
+      svg.selectAll("*").remove(); // Limpiar
       
-      {/* Poste */}
-      <div className="absolute bottom-0 left-1/4 w-2 h-60 bg-gray-800 rounded-full animate-rise" />
+      // Dibujar estructura del ahorcado
+      svg.append("rect")
+        .attr("x", 10).attr("y", 180)
+        .attr("width", 120).attr("height", 5)
+        .attr("fill", "#4b5563"); // Base
+
+      svg.append("rect")
+        .attr("x", 20).attr("y", 20)
+        .attr("width", 5).attr("height", 160)
+        .attr("fill", "#4b5563"); // Poste
+
+      svg.append("rect")
+        .attr("x", 20).attr("y", 20)
+        .attr("width", 80).attr("height", 5)
+        .attr("fill", "#4b5563"); // Travesaño
+
+      svg.append("rect")
+        .attr("x", 100).attr("y", 20)
+        .attr("width", 5).attr("height", 30)
+        .attr("fill", "#92400e"); // Cuerda
+
+      // Partes del cuerpo
+      if(wrongGuesses >= 1) {
+        svg.append("circle")
+          .attr("cx", 102.5).attr("cy", 65)
+          .attr("r", 15)
+          .attr("stroke", "#1e293b")
+          .attr("stroke-width", 3)
+          .attr("fill", "none");
+      }
       
-      {/* Travesaño */}
-      <div className="absolute top-0 left-1/4 w-32 h-2 bg-gray-800 rounded-full animate-stretch" />
+      if(wrongGuesses >= 2) {
+        svg.append("rect")
+          .attr("x", 100).attr("y", 80)
+          .attr("width", 5).attr("height", 60)
+          .attr("fill", "#1e293b"); // Cuerpo
+      }
       
-      {/* Cuerda */}
-      <div className={`absolute top-0 right-1/4 w-2 h-8 bg-amber-700 rounded-full transition-all duration-300 ${
-        gameStatus === "lost" ? 'animate-swing' : ''
-      }`} />
+      if(wrongGuesses >= 3) {
+        svg.append("line")
+          .attr("x1", 105).attr("y1", 90)
+          .attr("x2", 140).attr("y2", 110)
+          .attr("stroke", "#1e293b")
+          .attr("stroke-width", 3); // Brazo derecho
+      }
       
-      {/* Cabeza */}
-      {wrongGuesses >= 1 && (
-        <div className="absolute top-8 right-1/4 -mr-3 w-10 h-10 rounded-full border-4 border-gray-800 animate-pop-in" />
-      )}
+      if(wrongGuesses >= 4) {
+        svg.append("line")
+          .attr("x1", 105).attr("y1", 90)
+          .attr("x2", 70).attr("y2", 110)
+          .attr("stroke", "#1e293b")
+          .attr("stroke-width", 3); // Brazo izquierdo
+      }
       
-      {/* Cuerpo */}
-      {wrongGuesses >= 2 && (
-        <div className="absolute top-18 right-1/4 w-2 h-20 bg-gray-800 -mr-1 rounded-full animate-extend" />
-      )}
+      if(wrongGuesses >= 5) {
+        svg.append("line")
+          .attr("x1", 105).attr("y1", 140)
+          .attr("x2", 140).attr("y2", 180)
+          .attr("stroke", "#1e293b")
+          .attr("stroke-width", 3); // Pierna derecha
+      }
       
-      {/* Brazos */}
-      {wrongGuesses >= 3 && (
-        <div className="absolute top-24 right-1/4 w-12 h-2 bg-gray-800 -mr-12 rotate-45 origin-right rounded-full animate-arm-swing-left" />
-      )}
-      {wrongGuesses >= 4 && (
-        <div className="absolute top-24 right-1/4 w-12 h-2 bg-gray-800 mr-10 -rotate-45 origin-left rounded-full animate-arm-swing-right" />
-      )}
-      
-      {/* Piernas */}
-      {wrongGuesses >= 5 && (
-        <div className="absolute top-38 right-1/4 w-14 h-2 bg-gray-800 -mr-13 rotate-45 origin-right rounded-full animate-leg-kick-left" />
-      )}
-      {wrongGuesses >= 6 && (
-        <div className="absolute top-38 right-1/4 w-14 h-2 bg-gray-800 mr-11 -rotate-45 origin-left rounded-full animate-leg-kick-right" />
-      )}
-    </div>
-  );
+      if(wrongGuesses >= 6) {
+        svg.append("line")
+          .attr("x1", 105).attr("y1", 140)
+          .attr("x2", 70).attr("y2", 180)
+          .attr("stroke", "#1e293b")
+          .attr("stroke-width", 3); // Pierna izquierda
+      }
+    }, [wrongGuesses]);
+
+    return (
+      <div className="flex justify-center mb-6">
+        <svg 
+          ref={svgRef} 
+          width="200" 
+          height="200" 
+          viewBox="0 0 200 200"
+          className="drop-shadow-md"
+        ></svg>
+      </div>
+    );
+  };
 
   const renderKeyboard = () => (
     <div className="flex flex-wrap justify-center gap-2 max-w-xl mx-auto px-4">
@@ -244,7 +292,7 @@ export default function AhorcadoPalabras() {
         )}
       </header>
       
-      {renderHangman()}
+      <HangmanSVG />
       {renderWord()}
       {renderGameStatus()}
       {renderKeyboard()}
