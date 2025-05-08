@@ -151,7 +151,9 @@ export default function BunnyAdventure() {
 
       <div className="flex flex-col md:flex-row gap-4 w-full">
         {/* Área de programación */}
-        <div className="bg-white p-2 md:p-4 rounded-lg border border-gray-200 w-full md:w-1/4 overflow-y-auto max-h-[300px]">
+        <div
+          className="bg-white p-2 md:p-4 rounded-lg border border-gray-200 w-full md:w-1/4 overflow-y-auto max-h-[300px]"
+        >
           <h3 className="font-bold text-lg mb-3 text-blue-800">Programa</h3>
           <div className="space-y-2">
             <h2 className="font-bold text-lg mb-4 text-blue-800">Bloques de Comando</h2>
@@ -164,7 +166,7 @@ export default function BunnyAdventure() {
                   onClick={() => handleBlockClick(block)}
                   className="p-2 md:p-3 bg-blue-50 rounded-lg flex items-center gap-2 border-l-4 border-blue-400 cursor-pointer hover:bg-blue-100 transition-colors"
                 >
-                  <div className="text-purple-500">{block.icon}</div>
+                  <div className="text-blue-500">{block.icon}</div>
                   <span>{block.text}</span>
                 </div>
               ))}
@@ -199,8 +201,24 @@ export default function BunnyAdventure() {
                           userSelect: 'none'
                         }}
                       >
-                        {isBunny ? <FaCarrot className="rotate-45" /> : 
-                         isCarrot ? '🥕' : 
+                        {isBunny ? (
+                          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                            <div className="relative">
+                              {/* Orejas */}
+                              <div className="absolute -top-3 -left-1 w-2 h-3 bg-gray-300 rounded-full"></div>
+                              <div className="absolute -top-3 -right-1 w-2 h-3 bg-gray-300 rounded-full"></div>
+                              {/* Cabeza */}
+                              <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                              {/* Dirección */}
+                              <div className={`absolute w-2 h-1 bg-black ${
+                                bunnyDirection === 0 ? '-top-1 left-2 rotate-0' : // arriba
+                                bunnyDirection === 1 ? 'top-2 -right-1 rotate-90' : // derecha
+                                bunnyDirection === 2 ? '-bottom-1 left-2 rotate-180' : // abajo
+                                'top-2 -left-1 -rotate-90' // izquierda
+                              }`}></div>
+                            </div>
+                          </div>
+                        ) : isCarrot ? '🥕' : 
                          isObstacle ? '❌' : 
                          '•'}
                       </div>
@@ -214,8 +232,6 @@ export default function BunnyAdventure() {
           {/* Área de programación */}
           <div 
             ref={programAreaRef}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
             className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4 min-h-32 mb-4"
           >
             <h2 className="font-bold text-lg mb-2 text-purple-800">Tu Programa</h2>
