@@ -45,31 +45,16 @@ export default function BunnyAdventure() {
     initLevel(level);
   }, [level]);
 
-  // Manejadores de arrastrar y soltar
-  const handleDragStart = (block, e) => {
-    setDraggingBlock(block);
-    e.dataTransfer.setData('text/plain', block.id);
+  // Manejadores de clic/push
+  const handleBlockClick = (block) => {
+    if (gameState !== 'idle') return;
+    setBlocks(prev => [...prev, block]);
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    if (!draggingBlock || gameState !== 'idle') return;
-    
-    const rect = programAreaRef.current.getBoundingClientRect();
-    const y = e.clientY - rect.top;
-    
-    // Calcular posición aproximada en la secuencia
-    const position = Math.floor(y / 60);
-    
-    setBlocks(prev => {
-      const newBlocks = [...prev];
-      newBlocks.splice(position, 0, draggingBlock);
-      return newBlocks;
-    });
+  // Manejador para borrar bloque
+  const handleDeleteBlock = (index) => {
+    if (gameState !== 'idle') return;
+    setBlocks(prev => prev.filter((_, i) => i !== index));
   };
 
   // Ejecutar programa
@@ -164,35 +149,37 @@ export default function BunnyAdventure() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Bloques de comandos */}
-        <div className="bg-blue-50 p-4 rounded-lg w-full md:w-1/4">
-          <h2 className="font-bold text-lg mb-4 text-blue-800">Bloques de Comando</h2>
-          <p className="text-sm text-gray-600 mb-4">Arrastra estos bloques al área de programación</p>
-          
-          <div className="space-y-3">
-            {commandBlocks.map(block => (
-              <div
-                key={block.id}
-                draggable
-                onDragStart={(e) => handleDragStart(block, e)}
-                className="p-3 bg-white rounded-lg shadow-md cursor-move flex items-center gap-2 border-l-4 border-blue-400"
-              >
-                <div className="text-blue-500">{block.icon}</div>
-                <span>{block.text}</span>
-              </div>
-            ))}
+      <div className="flex flex-col md:flex-row gap-4 w-full">
+        {/* Área de programación */}
+        <div className="bg-white p-2 md:p-4 rounded-lg border border-gray-200 w-full md:w-1/4 overflow-y-auto max-h-[300px]">
+          <h3 className="font-bold text-lg mb-3 text-blue-800">Programa</h3>
+          <div className="space-y-2">
+            <h2 className="font-bold text-lg mb-4 text-blue-800">Bloques de Comando</h2>
+            <p className="text-sm text-gray-600 mb-4">Arrastra estos bloques al área de programación</p>
+            
+            <div className="space-y-3">
+              {commandBlocks.map(block => (
+                <div
+                  key={block.id}
+                  onClick={() => handleBlockClick(block)}
+                  className="p-2 md:p-3 bg-blue-50 rounded-lg flex items-center gap-2 border-l-4 border-blue-400 cursor-pointer hover:bg-blue-100 transition-colors"
+                >
+                  <div className="text-purple-500">{block.icon}</div>
+                  <span>{block.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Área principal */}
         <div className="flex-1">
           {/* Tablero de juego */}
-          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 mb-4">
+          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-2 md:p-4 mb-4">
             <div className="relative h-64 bg-green-100 rounded">
               {/* Cuadrícula */}
               {Array.from({ length: 5 }).map((_, y) => (
-                <div key={y} className="flex">
+                <div key={y} className="flex gap-1">
                   {Array.from({ length: 5 }).map((_, x) => {
                     const isObstacle = levels[level - 1].obstacles.some(obs => obs.x === x && obs.y === y);
                     const isCarrot = levels[level - 1].carrot.x === x && levels[level - 1].carrot.y === y;
@@ -200,39 +187,22 @@ export default function BunnyAdventure() {
                     
                     return (
                       <div 
-                        key={`${x}-${y}`}
-                        className={`w-1/5 h-12 border border-green-200 flex items-center justify-center
-                          ${isObstacle ? 'bg-gray-300' : ''}
-                          ${isCarrot ? 'bg-orange-50' : ''}
-                        `}
+                        key={x}
+                        className={`w-12 h-12 flex items-center justify-center text-2xl font-bold ${
+                          isBunny ? 'text-orange-600' :
+                          isCarrot ? 'text-yellow-600' :
+                          isObstacle ? 'text-gray-600' :
+                          'text-gray-300'
+                        }`}
+                        style={{
+                          touchAction: 'none',
+                          userSelect: 'none'
+                        }}
                       >
-                        {isBunny && (
-                          <div className={`w-8 h-8 rounded-full bg-white flex items-center justify-center
-                            ${gameState === 'running' ? 'animate-bounce' : ''}`}>
-                            <div className="relative">
-                              {/* Orejas */}
-                              <div className="absolute -top-3 -left-1 w-2 h-3 bg-gray-300 rounded-full"></div>
-                              <div className="absolute -top-3 -right-1 w-2 h-3 bg-gray-300 rounded-full"></div>
-                              {/* Cabeza */}
-                              <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                              {/* Dirección */}
-                              <div className={`absolute w-2 h-1 bg-black ${
-                                bunnyDirection === 0 ? '-top-1 left-2 rotate-0' : // arriba
-                                bunnyDirection === 1 ? 'top-2 -right-1 rotate-90' : // derecha
-                                bunnyDirection === 2 ? '-bottom-1 left-2 rotate-180' : // abajo
-                                'top-2 -left-1 -rotate-90' // izquierda
-                              }`}></div>
-                            </div>
-                          </div>
-                        )}
-                        {isCarrot && (
-                          <div className="text-orange-500">
-                            <FaCarrot />
-                          </div>
-                        )}
-                        {isObstacle && (
-                          <div className="w-6 h-6 bg-gray-500 rounded-sm"></div>
-                        )}
+                        {isBunny ? <FaCarrot className="rotate-45" /> : 
+                         isCarrot ? '🥕' : 
+                         isObstacle ? '❌' : 
+                         '•'}
                       </div>
                     );
                   })}
@@ -257,20 +227,24 @@ export default function BunnyAdventure() {
             ) : (
               <div className="space-y-2">
                 {blocks.map((block, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className="p-3 bg-white rounded-lg shadow-sm flex items-center gap-2 border-l-4 border-purple-400"
+                    className="p-2 md:p-3 bg-blue-50 rounded-lg flex items-center gap-2 mb-2 relative"
+                    style={{
+                      touchAction: 'none'
+                    }}
                   >
+                    <div
+                      className="absolute -right-2 -top-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer hover:bg-red-600 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteBlock(index);
+                      }}
+                    >
+                      ✕
+                    </div>
                     <div className="text-purple-500">{block.icon}</div>
                     <span>{block.text}</span>
-                    <button 
-                      onClick={() => {
-                        setBlocks(prev => prev.filter((_, i) => i !== index));
-                      }}
-                      className="ml-auto text-gray-400 hover:text-red-500"
-                    >
-                      ×
-                    </button>
                   </div>
                 ))}
               </div>
