@@ -9,7 +9,7 @@ const words = [
   { word: "COMPAÑERO", category: "Persona", hint: "Está en tu mismo salón de clases" },
   { word: "BIBLIOTECA", category: "Lugar", hint: "Tiene muchos libros para leer" },
   { word: "RESPETO", category: "Valor", hint: "Tratar bien a los demás" },
-  { word: "DIVERSIÓN", category: "Actividad", hint: "Cuando juegas y te ríes mucho" }
+  { word: "DIVERSION", category: "Actividad", hint: "Cuando juegas y te ríes mucho" }
 ];
 
 const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
@@ -23,6 +23,16 @@ export default function AhorcadoPalabras() {
   const [gameStatus, setGameStatus] = useState("playing");
   const [showHint, setShowHint] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Validate word data on mount
+  useEffect(() => {
+    if (!currentWordObj?.word || currentWordObj.word.length === 0) {
+      setError('No se pudo cargar la palabra');
+      return;
+    }
+    setError(null);
+  }, [currentWordObj]);
 
   // Manejo de teclado
   useEffect(() => {
@@ -37,18 +47,27 @@ export default function AhorcadoPalabras() {
   }, [guessedLetters, gameStatus]);
 
   const startNewGame = () => {
-    const randomIndex = Math.floor(Math.random() * words.length);
-    setCurrentWordObj(words[randomIndex]);
-    setGuessedLetters([]);
-    setWrongGuesses(0);
-    setGameStatus("playing");
-    setShowHint(false);
-    setHintUsed(false);
+    try {
+      const randomIndex = Math.floor(Math.random() * words.length);
+      if (randomIndex < 0 || randomIndex >= words.length) {
+        throw new Error('Índice fuera de rango');
+      }
+      setCurrentWordObj(words[randomIndex]);
+      setGuessedLetters([]);
+      setWrongGuesses(0);
+      setGameStatus("playing");
+      setShowHint(false);
+      setHintUsed(false);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error al iniciar nuevo juego:', err);
+    }
   };
 
   const handleLetterClick = useCallback((letter) => {
     if (guessedLetters.includes(letter)) return;
-    
+    if (!alphabet.includes(letter)) return;
+
     setGuessedLetters(prev => [...prev, letter]);
     
     if (!currentWordObj.word.includes(letter)) {
@@ -64,7 +83,7 @@ export default function AhorcadoPalabras() {
       const won = [...currentWordObj.word].every(l => [...guessedLetters, letter].includes(l));
       if (won) setGameStatus("won");
     }
-  }, [guessedLetters, currentWordObj]);
+  }, [guessedLetters, currentWordObj, alphabet]);
 
   const handleShowHint = () => {
     if (!hintUsed) {
@@ -76,11 +95,13 @@ export default function AhorcadoPalabras() {
   };
 
   const renderWord = () => (
-    <div className="flex justify-center mb-6 space-x-2">
+    <div className="flex justify-center mb-6 space-x-2" role="list" aria-label="Palabra actual">
       {[...currentWordObj.word].map((letter, i) => (
         <div 
           key={`${letter}-${i}`} 
           className="w-10 h-12 border-b-4 border-indigo-600 flex items-center justify-center relative"
+          role="listitem"
+          aria-label={`Letra ${letter} ${guessedLetters.includes(letter) ? 'revelada' : 'oculta'}`}
         >
           <span className={`text-3xl font-bold transition-all duration-500 ${ 
             guessedLetters.includes(letter) || gameStatus !== "playing"
@@ -192,12 +213,14 @@ export default function AhorcadoPalabras() {
   };
 
   const renderKeyboard = () => (
-    <div className="flex flex-wrap justify-center gap-2 max-w-xl mx-auto px-4">
+    <div className="flex flex-wrap justify-center gap-2 max-w-xl mx-auto px-4" role="group" aria-label="Teclado virtual">
       {[...alphabet].map(letter => (
         <button
           key={letter}
           onClick={() => handleLetterClick(letter)}
           disabled={guessedLetters.includes(letter) || gameStatus !== "playing"}
+          aria-label={`Letra ${letter}`}
+          aria-disabled={guessedLetters.includes(letter) || gameStatus !== "playing"}
           className={`w-10 h-10 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
             guessedLetters.includes(letter)
               ? currentWordObj.word.includes(letter)
@@ -246,7 +269,16 @@ export default function AhorcadoPalabras() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-3xl shadow-xl">
+    <div className="max-w-4xl mx-auto p-4" role="application" aria-label="Juego del Ahorcado">
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+          {error}
+        </div>
+      )}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-4">Ahorcado de Palabras</h1>
+        <p className="text-gray-600 mb-4">Categoría: {currentWordObj?.category}</p>
+      </div>
       <header className="text-center mb-6">
         <h1 className="text-4xl font-bold text-indigo-700 mb-2 animate-bounce">Ahorcado</h1>
         <div className="flex justify-between items-center mb-4">

@@ -120,13 +120,13 @@ export default function SopaDeLetras({ words = [] }) {
     }
   }, [wordsToFind]);
 
-  const handleMouseDown = (r, c) => {
+  const handleTouchStart = (r, c) => {
     if (isWon) return;
     setIsSelecting(true);
     setSelectedCells([{ r, c }]);
   };
 
-  const handleMouseEnter = (r, c) => {
+  const handleTouchMove = (r, c) => {
     if (!isSelecting || isWon) return;
     if (selectedCells.length > 0) {
       const lastCell = selectedCells[selectedCells.length - 1];
@@ -135,7 +135,7 @@ export default function SopaDeLetras({ words = [] }) {
     setSelectedCells(prev => [...prev, { r, c }]);
   };
 
-  const handleMouseUp = () => {
+  const handleTouchEnd = () => {
     if (!isSelecting || isWon) return;
     setIsSelecting(false);
 
@@ -175,9 +175,9 @@ export default function SopaDeLetras({ words = [] }) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 items-start p-4">
+    <div className="flex flex-col md:flex-row gap-4 items-start p-2 md:p-4 w-full">
       <div
-        className="grid select-none border border-gray-300 shadow-md bg-white"
+        className="grid select-none border border-gray-300 shadow-md bg-white touch-none"
         style={{
           gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
           touchAction: 'none',
@@ -195,14 +195,30 @@ export default function SopaDeLetras({ words = [] }) {
               <div
                 key={cellId}
                 className={`
-                  w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border border-gray-200
-                  text-sm sm:text-lg font-medium uppercase cursor-pointer
+                  w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border border-gray-200
+                  text-lg sm:text-xl font-medium uppercase cursor-pointer
                   ${isFound ? 'bg-green-300 text-green-800' : ''}
                   ${isSelected ? 'bg-blue-300 text-blue-800 ring-2 ring-blue-500' : ''}
                   ${!isFound && !isSelected ? 'bg-white hover:bg-gray-100 text-gray-700' : ''}
                 `}
                 onMouseDown={() => handleMouseDown(r, c)}
                 onMouseEnter={() => handleMouseEnter(r, c)}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                  handleTouchStart(r, c);
+                }}
+                onTouchMove={(e) => {
+                  e.preventDefault();
+                  handleTouchMove(r, c);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  handleTouchEnd();
+                }}
+                onTouchCancel={() => {
+                  setIsSelecting(false);
+                  setSelectedCells([]);
+                }}
               >
                 {letter}
               </div>
