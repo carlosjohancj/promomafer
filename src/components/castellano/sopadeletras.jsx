@@ -197,11 +197,14 @@ export default function SopaDeLetras({ words = [] }) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-start p-2 md:p-4 w-full">
+    <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-start p-1 md:p-4 w-full max-w-screen">
       <div
-        className="grid select-none border border-gray-300 shadow-md bg-white"
+        className="grid select-none border border-gray-300 shadow-md bg-white mx-auto touch-pan-y touch-pinch-zoom"
         style={{
           gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
+          maxWidth: '100%',
+          overflow: 'hidden',
+          touchAction: 'pan-y pinch-zoom'
         }}
         onMouseUp={handleSelectionEnd}
         onMouseLeave={handleSelectionEnd}
@@ -219,10 +222,10 @@ export default function SopaDeLetras({ words = [] }) {
                 data-row={r}
                 data-col={c}
                 className={`
-                  w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border border-gray-200
-                  text-lg sm:text-xl font-medium uppercase cursor-pointer
+                  w-6 h-6 sm:w-10 sm:h-10 flex items-center justify-center border border-gray-200
+                  text-sm sm:text-lg md:text-xl font-medium uppercase cursor-pointer
                   ${isFound ? 'bg-green-300 text-green-800' : ''}
-                  ${isSelected ? 'bg-blue-300 text-blue-800 ring-2 ring-blue-500' : ''}
+                  ${isSelected ? 'bg-blue-300 text-blue-800 ring-1 ring-blue-500' : ''}
                   ${!isFound && !isSelected ? 'bg-white hover:bg-gray-100 text-gray-700' : ''}
                 `}
                 onMouseDown={(e) => handleCellMouseDown(r, c, e)}
@@ -238,13 +241,13 @@ export default function SopaDeLetras({ words = [] }) {
         )}
       </div>
 
-      <div className="w-full md:w-64 flex-shrink-0">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">Palabras a Buscar:</h2>
-        <ul className="space-y-1 mb-6">
+      <div className="w-full md:w-56 flex-shrink-0 px-2">
+        <h2 className="text-lg font-semibold mb-2 text-gray-800">Palabras:</h2>
+        <ul className="grid grid-cols-2 gap-1 mb-4">
           {wordsToFind.map(({ word, found }) => (
             <li
               key={word}
-              className={`text-base sm:text-lg ${found ? 'line-through text-gray-400' : 'text-gray-700 font-medium'}`}
+              className={`text-xs sm:text-sm ${found ? 'line-through text-gray-400' : 'text-gray-700 font-medium'}`}
             >
               {word}
             </li>
@@ -258,9 +261,15 @@ export default function SopaDeLetras({ words = [] }) {
           </div>
         )}
 
+        {typeof window !== 'undefined' && window.innerWidth < 640 && (
+          <div className="md:hidden bg-yellow-100 text-yellow-800 p-2 text-center text-sm mb-2">
+            ⤷ Gira tu teléfono para mejor visualización
+          </div>
+        )}
+
         <button
           onClick={initializeGame}
-          className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          className="flex items-center justify-center gap-1 w-full px-2 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm sm:text-base"
         >
           <span>↻</span>
           <span>Nuevo Juego</span>
