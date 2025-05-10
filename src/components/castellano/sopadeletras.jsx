@@ -183,7 +183,7 @@ export default function SopaDeLetras({ words = [] }) {
           touchAction: 'none',
         }}
         onMouseLeave={handleMouseLeaveGrid}
-        onMouseUp={handleMouseUp}
+     
       >
         {grid.map((row, r) =>
           row.map((letter, c) => {
