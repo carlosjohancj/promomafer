@@ -120,24 +120,53 @@ export default function SopaDeLetras({ words = [] }) {
     }
   }, [wordsToFind]);
 
-  const handleTouchStart = (r, c) => {
+  const handleCellMouseDown = (r, c, event) => {
     if (isWon) return;
+    event.preventDefault();
     setIsSelecting(true);
     setSelectedCells([{ r, c }]);
   };
 
-  const handleTouchMove = (r, c) => {
-    if (!isSelecting || isWon) return;
-    if (selectedCells.length > 0) {
-      const lastCell = selectedCells[selectedCells.length - 1];
-      if (lastCell.r === r && lastCell.c === c) return;
+  const handleCellMouseEnter = (r, c) => {
+    if (isSelecting && !isWon) {
+      setSelectedCells(prev => {
+        // Evitar duplicados
+        if (prev.some(cell => cell.r === r && cell.c === c)) return prev;
+        return [...prev, { r, c }];
+      });
     }
-    setSelectedCells(prev => [...prev, { r, c }]);
   };
 
-  const handleTouchEnd = () => {
+  const handleCellTouchStart = (r, c, event) => {
+    if (isWon) return;
+    event.preventDefault();
+    setIsSelecting(true);
+    setSelectedCells([{ r, c }]);
+  };
+
+  const handleCellTouchMove = (r, c, event) => {
+    if (isSelecting && !isWon) {
+      event.preventDefault();
+      const touch = event.touches[0];
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (element && element.dataset.row && element.dataset.col) {
+        const newR = parseInt(element.dataset.row);
+        const newC = parseInt(element.dataset.col);
+        if (!selectedCells.some(cell => cell.r === newR && cell.c === newC)) {
+          setSelectedCells(prev => [...prev, { r: newR, c: newC }]);
+        }
+      }
+    }
+  };
+
+  const handleSelectionEnd = () => {
     if (!isSelecting || isWon) return;
     setIsSelecting(false);
+
+    if (selectedCells.length < 2) {
+      setSelectedCells([]);
+      return;
+    }
 
     const selectedWordForward = selectedCells.map(({ r, c }) => grid[r][c]).join('');
     const selectedWordBackward = selectedWordForward.split('').reverse().join('');
@@ -167,23 +196,16 @@ export default function SopaDeLetras({ words = [] }) {
     setSelectedCells([]);
   };
 
-  const handleMouseLeaveGrid = () => {
-    if (isSelecting) {
-      setIsSelecting(false);
-      setSelectedCells([]);
-    }
-  };
-
   return (
     <div className="flex flex-col md:flex-row gap-4 items-start p-2 md:p-4 w-full">
       <div
-        className="grid select-none border border-gray-300 shadow-md bg-white touch-none"
+        className="grid select-none border border-gray-300 shadow-md bg-white"
         style={{
           gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
-          touchAction: 'none',
         }}
-        onMouseLeave={handleMouseLeaveGrid}
-     
+        onMouseUp={handleSelectionEnd}
+        onMouseLeave={handleSelectionEnd}
+        onTouchEnd={handleSelectionEnd}
       >
         {grid.map((row, r) =>
           row.map((letter, c) => {
@@ -194,6 +216,8 @@ export default function SopaDeLetras({ words = [] }) {
             return (
               <div
                 key={cellId}
+                data-row={r}
+                data-col={c}
                 className={`
                   w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border border-gray-200
                   text-lg sm:text-xl font-medium uppercase cursor-pointer
@@ -201,24 +225,11 @@ export default function SopaDeLetras({ words = [] }) {
                   ${isSelected ? 'bg-blue-300 text-blue-800 ring-2 ring-blue-500' : ''}
                   ${!isFound && !isSelected ? 'bg-white hover:bg-gray-100 text-gray-700' : ''}
                 `}
-                onMouseDown={() => handleMouseDown(r, c)}
-                onMouseEnter={() => handleMouseEnter(r, c)}
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  handleTouchStart(r, c);
-                }}
-                onTouchMove={(e) => {
-                  e.preventDefault();
-                  handleTouchMove(r, c);
-                }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  handleTouchEnd();
-                }}
-                onTouchCancel={() => {
-                  setIsSelecting(false);
-                  setSelectedCells([]);
-                }}
+                onMouseDown={(e) => handleCellMouseDown(r, c, e)}
+                onMouseEnter={() => handleCellMouseEnter(r, c)}
+                onTouchStart={(e) => handleCellTouchStart(r, c, e)}
+                onTouchMove={(e) => handleCellTouchMove(r, c, e)}
+                onContextMenu={(e) => e.preventDefault()}
               >
                 {letter}
               </div>
@@ -249,7 +260,7 @@ export default function SopaDeLetras({ words = [] }) {
 
         <button
           onClick={initializeGame}
-          className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
         >
           <span>↻</span>
           <span>Nuevo Juego</span>
